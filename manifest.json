@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "X 人员标注",
+  "version": "2.2.0",
+  "description": "为 X 用户添加本地备注与分组，免费云备份，创作者可出售自己的备注",
+  "permissions": ["storage", "contextMenus", "alarms"],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://arweave.net/*",
+    "https://*.arweave.net/*",
+    "https://turbo-gateway.com/*",
+    "https://*.turbo-gateway.com/*",
+    "https://upload.ardrive.io/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "X 人员标注",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["shared/config.js", "shared/ui.js", "shared/store.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://arweave.net/*",
+        "https://*.arweave.net/*",
+        "https://turbo-gateway.com/*",
+        "https://*.turbo-gateway.com/*",
+        "https://permagate.io/*",
+        "https://*.permagate.io/*",
+        "https://ar-io.dev/*",
+        "https://*.ar-io.dev/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*"
+      ],
+      "js": ["market-bridge.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

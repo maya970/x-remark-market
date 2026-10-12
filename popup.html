@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>X 人员标注</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>X 人员标注</h1>
+      <nav class="nav">
+        <button type="button" class="link" data-open="market">备注市场</button>
+        <button type="button" class="link" id="creator-link" data-open="creator">创作者计划</button>
+      </nav>
+    </header>
+
+    <section class="card" id="guest-card" hidden>
+      <p class="hint">创建账号后可免费上传备份、在其他设备恢复，并参与创作者计划。</p>
+      <div class="row">
+        <button type="button" class="btn primary" id="create-btn">创建账号</button>
+        <button type="button" class="btn" id="import-btn">导入账号</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden />
+      </div>
+    </section>
+
+    <section class="card" id="user-card" hidden>
+      <div class="account-line">
+        <span class="addr" id="address" title="点击复制地址"></span>
+        <span class="balance" id="balance">余额 —</span>
+      </div>
+      <div class="row">
+        <button type="button" class="btn primary" id="backup-btn">上传备份</button>
+        <button type="button" class="btn" id="restore-btn">恢复备份</button>
+        <button type="button" class="btn ghost" id="export-btn">导出账号</button>
+      </div>
+      <p class="muted" id="backup-info"></p>
+    </section>
+
+    <p class="status" id="status"></p>
+
+    <section class="card">
+      <form id="remark-form" class="form">
+        <input id="username" placeholder="用户名，如 elonmusk" autocomplete="off" />
+        <input id="remark" placeholder="备注名" maxlength="40" autocomplete="off" />
+        <input id="group" placeholder="分组（可选）" maxlength="40" list="group-options" autocomplete="off" />
+        <datalist id="group-options"></datalist>
+        <button type="submit" class="btn primary">保存</button>
+      </form>
+    </section>
+
+    <section class="toolbar">
+      <input id="search" placeholder="搜索用户名 / 备注 / 分组" autocomplete="off" />
+      <select id="group-filter"></select>
+    </section>
+
+    <section id="list" class="list"></section>
+
+    <script src="shared/config.js"></script>
+    <script src="shared/ui.js"></script>
+    <script src="shared/store.js"></script>
+    <script src="shared/chain.js"></script>
+    <script src="shared/market.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

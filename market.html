@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>X 人员标注 · 我的市场</title>
+    <link rel="stylesheet" href="market.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>X 人员标注</h1>
+      <nav class="tabs">
+        <a href="#purchases" data-tab="purchases">我的购买</a>
+        <a href="#creator" data-tab="creator">创作者计划</a>
+        <a id="market-link" class="external" target="_blank">逛备注市场 ↗</a>
+      </nav>
+      <div class="account" id="account"></div>
+    </header>
+
+    <main>
+      <p class="status" id="status"></p>
+
+      <section data-panel="buy" hidden>
+        <div class="card buy-card" id="buy-box"></div>
+      </section>
+
+      <section data-panel="purchases" hidden>
+        <div id="purchases" class="stack"></div>
+      </section>
+
+      <section data-panel="creator" hidden>
+        <div class="card" id="creator-stats"></div>
+        <form class="card form" id="creator-form">
+          <h2>发布我的备注</h2>
+          <label>标题<input id="c-title" maxlength="40" placeholder="例如：Web3 KOL 精选标注" /></label>
+          <label>
+            介绍（会公开展示在市场中，用来吸引买家）
+            <textarea id="c-desc" maxlength="500" rows="5" placeholder="这份备注覆盖哪些人、有什么价值、多久更新一次……"></textarea>
+          </label>
+          <label>价格（AR / 每个版本）<input id="c-price" placeholder="例如 0.5" /></label>
+          <p class="hint" id="c-split"></p>
+          <div>
+            <div class="label">出售的分组（仅包含你自己写的备注）</div>
+            <div id="c-groups" class="checks"></div>
+          </div>
+          <div class="row">
+            <button type="submit" class="btn primary" id="publish-btn">发布</button>
+            <button type="button" class="btn danger" id="close-btn" hidden>下架</button>
+          </div>
+          <p class="hint">
+            上传免费。备注加密存储，市场只公开标题、介绍、分组和最多 8 个收录用户名。买家付款后由平台自动发货，你无需在线、无需任何操作，70% 货款直接打到你的账号。每次更新会生成新版本，买家需重新购买新版本。
+          </p>
+        </form>
+
+        <div class="card form" id="bid-card">
+          <h2>竞价推广</h2>
+          <p class="hint">
+            向平台出价，近 7 天出价总额最高的前 8 名会显示在市场首页的「竞价位」，出价越高越靠前。每笔出价 7 天后失效，可随时追加。
+          </p>
+          <div id="bid-board" class="bid-board"></div>
+          <div class="row">
+            <input id="bid-amount" placeholder="出价金额（AR），至少 0.01" />
+            <button type="button" class="btn gold" id="bid-btn">出价</button>
+          </div>
+          <p class="hint" id="bid-hint"></p>
+        </div>
+      </section>
+
+      <details class="card guide">
+        <summary>如何获得 AR</summary>
+        <ol>
+          <li>在 <a id="buy-link" target="_blank">币安</a> 注册并购买 AR。</li>
+          <li>在币安选择「提币」，币种 AR，网络 Arweave。</li>
+          <li>提币地址填写你的账号地址：<code id="guide-address">请先创建账号</code></li>
+          <li>到账后刷新本页即可看到余额。</li>
+        </ol>
+      </details>
+    </main>
+
+    <script src="shared/config.js"></script>
+    <script src="shared/ui.js"></script>
+    <script src="shared/store.js"></script>
+    <script src="vendor/arweave.js"></script>
+    <script src="shared/chain.js"></script>
+    <script src="shared/market.js"></script>
+    <script src="market-page.js"></script>
+  </body>
+</html>

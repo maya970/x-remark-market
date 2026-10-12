@@ -1,0 +1,1554 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-remark-market" content="1" />
+    <title>X 备注市场 · 一次看懂圈子里的人</title>
+    <style>
+      @property --angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+      }
+
+      :root {
+        --bg: #06060b;
+        --panel: rgba(255, 255, 255, 0.04);
+        --line: rgba(255, 255, 255, 0.08);
+        --text: #eef0ff;
+        --muted: #8d90a8;
+        --cyan: #22d3ee;
+        --violet: #8b5cf6;
+        --pink: #ec4899;
+        --gold: #fbbf24;
+        --green: #34d399;
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        overflow-x: hidden;
+      }
+
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.25), transparent 60%),
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 48px 48px,
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 48px 48px,
+          var(--bg);
+      }
+
+      .blob {
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        filter: blur(110px);
+        opacity: 0.35;
+        animation: float 18s ease-in-out infinite;
+      }
+
+      .b1 {
+        background: var(--violet);
+        top: -160px;
+        left: -120px;
+      }
+
+      .b2 {
+        background: var(--cyan);
+        top: 30%;
+        right: -200px;
+        animation-delay: -6s;
+      }
+
+      .b3 {
+        background: var(--pink);
+        bottom: -220px;
+        left: 30%;
+        animation-delay: -12s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(80px, 60px) scale(1.1);
+        }
+        66% {
+          transform: translate(-60px, 40px) scale(0.92);
+        }
+      }
+
+      .wrap {
+        width: min(1200px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      /* ---------- nav ---------- */
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(18px) saturate(1.4);
+        background: rgba(6, 6, 11, 0.6);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav .wrap {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        height: 64px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+
+      .logo {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--violet), var(--cyan));
+        box-shadow: 0 0 24px rgba(139, 92, 246, 0.6);
+        font-weight: 900;
+      }
+
+      .search {
+        flex: 1;
+        max-width: 460px;
+        margin-left: auto;
+        position: relative;
+      }
+
+      .search input {
+        width: 100%;
+        height: 40px;
+        padding: 0 16px 0 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.05);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .search input:focus {
+        border-color: var(--violet);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+      }
+
+      .search svg {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.5;
+      }
+
+      .ext-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--muted);
+        white-space: nowrap;
+        cursor: pointer;
+        background: transparent;
+      }
+
+      .ext-pill i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--muted);
+      }
+
+      .ext-pill.on i {
+        background: var(--green);
+        box-shadow: 0 0 10px var(--green);
+      }
+
+      /* ---------- hero ---------- */
+
+      .hero {
+        padding: 72px 0 40px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        background: rgba(139, 92, 246, 0.1);
+        color: #c4b5fd;
+        font-size: 13px;
+      }
+
+      .hero h1 {
+        margin: 22px 0 16px;
+        font-size: clamp(36px, 6vw, 68px);
+        line-height: 1.08;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+
+      .grad {
+        background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink), var(--cyan));
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: flow 8s linear infinite;
+      }
+
+      @keyframes flow {
+        to {
+          background-position: 300% 0;
+        }
+      }
+
+      .hero p {
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        max-width: 820px;
+        margin: 48px auto 0;
+      }
+
+      .stat {
+        padding: 18px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .stat b {
+        display: block;
+        font-size: 28px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      /* ---------- buttons ---------- */
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 22px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.05);
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.09);
+      }
+
+      .btn.primary {
+        border: none;
+        background: linear-gradient(135deg, var(--violet), var(--cyan));
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.45);
+      }
+
+      .btn.primary:hover {
+        box-shadow: 0 10px 40px rgba(34, 211, 238, 0.5);
+      }
+
+      .btn.gold {
+        border: none;
+        color: #1a1203;
+        background: linear-gradient(135deg, #fde68a, var(--gold), #f59e0b);
+        box-shadow: 0 8px 30px rgba(251, 191, 36, 0.35);
+      }
+
+      .btn.small {
+        height: 34px;
+        padding: 0 14px;
+        font-size: 13px;
+      }
+
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: default;
+        transform: none;
+      }
+
+      /* ---------- sections ---------- */
+
+      section.block {
+        padding: 36px 0;
+        scroll-margin-top: 64px;
+      }
+
+      .sec-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .sec-head h2 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sec-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+      }
+
+      .hot {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: #1a1203;
+        background: linear-gradient(135deg, #fde68a, var(--gold));
+      }
+
+      /* ---------- promo ---------- */
+
+      .promo-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .promo-card {
+        position: relative;
+        padding: 2px;
+        border-radius: calc(var(--radius) + 2px);
+        background: conic-gradient(from var(--angle), var(--gold), var(--pink), var(--violet), var(--cyan), var(--gold));
+        animation: spin 5s linear infinite;
+        cursor: pointer;
+      }
+
+      @keyframes spin {
+        to {
+          --angle: 360deg;
+        }
+      }
+
+      .promo-card .inner {
+        height: 100%;
+        padding: 18px;
+        border-radius: var(--radius);
+        background: linear-gradient(160deg, #15121f, #0b0b12);
+      }
+
+      .promo-card .bid {
+        position: absolute;
+        top: -10px;
+        right: 16px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        color: #1a1203;
+        background: linear-gradient(135deg, #fde68a, var(--gold));
+        box-shadow: 0 4px 16px rgba(251, 191, 36, 0.5);
+      }
+
+      .promo-empty {
+        padding: 36px;
+        text-align: center;
+        border-radius: var(--radius);
+        border: 1px dashed rgba(251, 191, 36, 0.4);
+        color: var(--muted);
+        background: rgba(251, 191, 36, 0.04);
+      }
+
+      /* ---------- tabs ---------- */
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 5px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        overflow-x: auto;
+      }
+
+      .tabs button {
+        padding: 8px 18px;
+        border: none;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color 0.2s, background 0.2s;
+      }
+
+      .tabs button:hover {
+        color: var(--text);
+      }
+
+      .tabs button.active {
+        color: #fff;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(34, 211, 238, 0.8));
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+      }
+
+      /* ---------- cards ---------- */
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        animation: rise 0.5s both;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(139, 92, 246, 0.5);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.18);
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+      }
+
+      .cover {
+        position: relative;
+        height: 96px;
+        background:
+          radial-gradient(circle at 20% 30%, hsla(var(--h1), 90%, 60%, 0.9), transparent 55%),
+          radial-gradient(circle at 80% 70%, hsla(var(--h2), 90%, 55%, 0.9), transparent 55%),
+          #111;
+      }
+
+      .avatar {
+        position: absolute;
+        left: 18px;
+        bottom: -22px;
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        border: 3px solid #0d0d14;
+        background: linear-gradient(135deg, hsl(var(--h1), 80%, 55%), hsl(var(--h2), 80%, 45%));
+        font-size: 22px;
+        font-weight: 900;
+      }
+
+      .rank {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        min-width: 34px;
+        height: 28px;
+        padding: 0 10px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 13px;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+      }
+
+      .rank.r1 {
+        color: #1a1203;
+        background: linear-gradient(135deg, #fef3c7, var(--gold));
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.7);
+      }
+
+      .rank.r2 {
+        color: #111;
+        background: linear-gradient(135deg, #f8fafc, #94a3b8);
+      }
+
+      .rank.r3 {
+        color: #1a0d03;
+        background: linear-gradient(135deg, #fed7aa, #c2410c);
+      }
+
+      .price-tag {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 13px;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+        padding: 32px 18px 18px;
+      }
+
+      .card h3,
+      .promo-card h3 {
+        margin: 0;
+        font-size: 17px;
+        line-height: 1.35;
+      }
+
+      .desc {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .chip {
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: #c4b5fd;
+        background: rgba(139, 92, 246, 0.14);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        text-decoration: none;
+      }
+
+      .chip.user {
+        color: #a5f3fc;
+        background: rgba(34, 211, 238, 0.1);
+        border-color: rgba(34, 211, 238, 0.25);
+      }
+
+      .card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+
+      .metric b {
+        color: var(--text);
+        font-size: 15px;
+        margin-right: 2px;
+      }
+
+      .metric.fire b {
+        background: linear-gradient(90deg, var(--gold), var(--pink));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .owned-badge {
+        position: absolute;
+        right: 12px;
+        bottom: -12px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #052e1c;
+        background: var(--green);
+      }
+
+      .skeleton {
+        height: 300px;
+        border-radius: var(--radius);
+        background: linear-gradient(100deg, rgba(255, 255, 255, 0.03) 30%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 70%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+      }
+
+      @keyframes shimmer {
+        to {
+          background-position: -200% 0;
+        }
+      }
+
+      .empty {
+        grid-column: 1 / -1;
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      /* ---------- how ---------- */
+
+      .how {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .how div {
+        padding: 22px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .how b {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--violet), var(--cyan));
+      }
+
+      .how h4 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+
+      .how p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      footer {
+        padding: 40px 0 60px;
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+      }
+
+      /* ---------- modal ---------- */
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgba(3, 3, 8, 0.72);
+        backdrop-filter: blur(10px);
+        animation: fade 0.2s;
+      }
+
+      .modal[hidden] {
+        display: none;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+      }
+
+      .sheet {
+        position: relative;
+        width: min(620px, 100%);
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(170deg, #16141f, #0b0b12);
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7), 0 0 60px rgba(139, 92, 246, 0.2);
+        animation: pop 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.94) translateY(10px);
+          opacity: 0;
+        }
+      }
+
+      .sheet .cover {
+        height: 130px;
+      }
+
+      .sheet .avatar {
+        width: 68px;
+        height: 68px;
+        bottom: -28px;
+        font-size: 28px;
+        border-color: #13111b;
+      }
+
+      .sheet-body {
+        padding: 42px 26px 26px;
+      }
+
+      .sheet h2 {
+        margin: 0 0 6px;
+        font-size: 24px;
+      }
+
+      .sheet .by {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .sheet .full-desc {
+        margin: 16px 0;
+        color: #cfd2e6;
+        line-height: 1.75;
+        white-space: pre-wrap;
+      }
+
+      .sheet h4 {
+        margin: 20px 0 10px;
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .kpis div {
+        padding: 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--line);
+        text-align: center;
+      }
+
+      .kpis b {
+        display: block;
+        font-size: 20px;
+      }
+
+      .kpis span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .buy-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 24px;
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+      }
+
+      .buy-bar .big {
+        font-size: 26px;
+        font-weight: 900;
+      }
+
+      .buy-bar small {
+        display: block;
+        color: var(--muted);
+      }
+
+      .close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 1;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .steps {
+        margin: 0;
+        padding-left: 20px;
+        line-height: 2;
+        color: #cfd2e6;
+      }
+
+      code {
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 30px;
+        z-index: 60;
+        transform: translate(-50%, 20px);
+        padding: 12px 20px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--violet), var(--cyan));
+        font-weight: 700;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.25s;
+      }
+
+      #toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      @media (max-width: 760px) {
+        .stats,
+        .kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .how {
+          grid-template-columns: 1fr;
+        }
+
+        .brand span:last-child,
+        .ext-pill span {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+
+    <header class="nav">
+      <div class="wrap">
+        <div class="brand"><span class="logo">X</span><span>备注市场</span></div>
+        <label class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+          <input id="q" placeholder="搜索标题、分组、X 用户…" autocomplete="off" />
+        </label>
+        <button class="ext-pill" id="ext-pill" type="button"><i></i><span>检测插件中…</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero wrap">
+        <span class="eyebrow">基于 Arweave 永久存储 · 加密交付</span>
+        <h1>把圈子里的<span class="grad">每一个人</span><br />一次看懂</h1>
+        <p>
+          创作者整理的 X 用户备注与分组，购买后自动同步到你的浏览器，在 X 上直接显示在名字旁边。买一次，同一版本永久免费重新同步。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#board-sec">开始挑选</a>
+          <button class="btn" id="become-creator" type="button">成为创作者</button>
+        </div>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section class="block wrap" id="promo-sec">
+        <div class="sec-head">
+          <div>
+            <h2>竞价位 <span class="hot">推广</span></h2>
+            <p>近 7 天竞价总额最高的创作者，出价越高越靠前</p>
+          </div>
+          <button class="btn gold small" id="bid-btn" type="button">我要竞价</button>
+        </div>
+        <div id="promo" class="promo-row"></div>
+      </section>
+
+      <section class="block wrap" id="board-sec">
+        <div class="toolbar">
+          <nav class="tabs" id="tabs">
+            <button type="button" data-tab="total" class="active">总排名</button>
+            <button type="button" data-tab="month">月排名</button>
+            <button type="button" data-tab="week">周排名</button>
+            <button type="button" data-tab="random">随便看看</button>
+            <button type="button" data-tab="latest">最近更新</button>
+          </nav>
+          <button class="btn small" id="shuffle" type="button" hidden>换一批</button>
+        </div>
+        <div id="board" class="grid"></div>
+      </section>
+
+      <section class="block wrap">
+        <div class="sec-head"><h2>怎么运作</h2></div>
+        <div class="how">
+          <div>
+            <b>1</b>
+            <h4>安装插件，创建账号</h4>
+            <p>在插件弹窗里一键创建账号，自己的备注上传备份完全免费。</p>
+          </div>
+          <div>
+            <b>2</b>
+            <h4>挑选备注组，一键购买</h4>
+            <p>按排名、最新或随便看看挑选。付款上链确认后由平台自动发货，无需等待创作者。</p>
+          </div>
+          <div>
+            <b>3</b>
+            <h4>自动同步，在 X 上显示</h4>
+            <p>备注自动合并进你的本地分组，在 X 的名字旁直接显示。也可以成为创作者出售自己的备注。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>数据全部来自 Arweave 公开链上记录 · 排名按真实成交笔数统计</footer>
+
+    <div class="modal" id="modal" hidden>
+      <div class="sheet" id="sheet"></div>
+    </div>
+    <div id="toast"></div>
+
+    <script>
+      const CFG = {
+        APP_NAME: "X-Remark-Market",
+        ADMIN: "g85LUi_wJLM8NazTuZcI4VMuFrFLimyqCFJU_7rbP3E",
+        GATEWAYS: ["https://arweave.net", "https://turbo-gateway.com"],
+        BID_DAYS: 7,
+        PROMO_SLOTS: 8,
+        MAX_PAGES: 10
+      };
+      const DAY = 86400000;
+      const WINSTON_PER_AR = 1000000000000n;
+
+      const QUERY = `query($owners:[String!],$recipients:[String!],$tags:[TagFilter!],$after:String){
+        transactions(owners:$owners, recipients:$recipients, tags:$tags, first:100, after:$after, sort:HEIGHT_DESC){
+          pageInfo { hasNextPage }
+          edges { cursor node {
+            id recipient
+            owner { address }
+            quantity { winston }
+            tags { name value }
+            block { timestamp }
+          } }
+        }
+      }`;
+
+      const state = {
+        listings: [],
+        stats: new Map(),
+        bids: new Map(),
+        tab: "total",
+        query: "",
+        randomOrder: [],
+        loading: true,
+        ext: { ready: false, address: "", owned: new Map() }
+      };
+
+      const $ = (id) => document.getElementById(id);
+
+      const esc = (value) =>
+        String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+
+      function winstonToAr(winston) {
+        const value = BigInt(winston);
+        const whole = value / WINSTON_PER_AR;
+        const fraction = (value % WINSTON_PER_AR).toString().padStart(12, "0").replace(/0+$/, "");
+        return fraction ? `${whole}.${fraction}` : `${whole}`;
+      }
+
+      const shortAddr = (a) => (a ? `${a.slice(0, 5)}…${a.slice(-4)}` : "");
+
+      function timeAgo(ts) {
+        const diff = Date.now() - ts;
+        if (diff < 3600000) return `${Math.max(1, Math.round(diff / 60000))} 分钟前`;
+        if (diff < DAY) return `${Math.round(diff / 3600000)} 小时前`;
+        if (diff < 30 * DAY) return `${Math.round(diff / DAY)} 天前`;
+        return new Date(ts).toLocaleDateString("zh-CN");
+      }
+
+      function hues(address) {
+        let hash = 0;
+        for (const ch of address) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+        return [hash % 360, (hash >> 9) % 360];
+      }
+
+      function toast(text) {
+        const el = $("toast");
+        el.textContent = text;
+        el.classList.add("show");
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(() => el.classList.remove("show"), 2400);
+      }
+
+      // ---------- chain data ----------
+
+      async function queryGateway(gateway, variables) {
+        const nodes = [];
+        let after = null;
+        for (let page = 0; page < CFG.MAX_PAGES; page++) {
+          const res = await fetch(`${gateway}/graphql`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: QUERY, variables: { ...variables, after } }),
+            signal: AbortSignal.timeout(20000)
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const json = await res.json();
+          if (json.errors?.length) throw new Error(json.errors[0].message);
+          const connection = json.data.transactions;
+          for (const edge of connection.edges) nodes.push(edge.node);
+          if (!connection.pageInfo.hasNextPage || !connection.edges.length) break;
+          after = connection.edges[connection.edges.length - 1].cursor;
+        }
+        return nodes;
+      }
+
+      async function findAll(variables) {
+        const results = await Promise.allSettled(CFG.GATEWAYS.map((g) => queryGateway(g, variables)));
+        if (results.every((r) => r.status === "rejected")) throw new Error("无法连接 Arweave 网络，请稍后刷新");
+        const byId = new Map();
+        for (const result of results) {
+          if (result.status !== "fulfilled") continue;
+          for (const node of result.value) {
+            const existing = byId.get(node.id);
+            if (!existing || (!existing.block && node.block)) byId.set(node.id, node);
+          }
+        }
+        return [...byId.values()];
+      }
+
+      const appFilter = { name: "App-Name", values: [CFG.APP_NAME] };
+      const typeFilter = (type) => ({ name: "Type", values: [type] });
+
+      function tagsOf(node) {
+        const out = {};
+        for (const tag of node.tags || []) out[tag.name] = tag.value;
+        return out;
+      }
+
+      const timeOf = (node) => (node.block ? node.block.timestamp * 1000 : Date.now());
+
+      function parseListings(nodes) {
+        const latest = new Map();
+        for (const node of nodes) {
+          const tags = tagsOf(node);
+          const creator = node.owner.address;
+          const createdAt = Number(tags["Created-At"]) || 0;
+          if (latest.get(creator)?.createdAt >= createdAt) continue;
+          let priceWinston = 0n;
+          try {
+            priceWinston = BigInt(tags["Price-Winston"] || "0");
+          } catch {}
+          latest.set(creator, {
+            id: node.id,
+            creator,
+            versionId: tags["Version-Id"] || "",
+            status: tags.Status,
+            title: tags.Title || "未命名",
+            description: tags.Description || "",
+            priceWinston,
+            count: Number(tags["Entry-Count"]) || 0,
+            groups: (tags.Groups || "").split(",").filter(Boolean),
+            preview: (tags.Preview || "").split(",").filter(Boolean),
+            createdAt
+          });
+        }
+        return [...latest.values()].filter((l) => l.status === "active" && l.priceWinston > 0n);
+      }
+
+      function computeStats(purchases, fees) {
+        const paidFees = new Set(fees.map((f) => `${f.owner.address}|${tagsOf(f)["Purchase-Id"]}`));
+        const stats = new Map();
+        const now = Date.now();
+        for (const purchase of purchases) {
+          const purchaseId = tagsOf(purchase)["Purchase-Id"];
+          if (!purchaseId || !paidFees.has(`${purchase.owner.address}|${purchaseId}`)) continue;
+          const s = stats.get(purchase.recipient) || { total: 0, month: 0, week: 0 };
+          const age = now - timeOf(purchase);
+          s.total += 1;
+          if (age <= 30 * DAY) s.month += 1;
+          if (age <= 7 * DAY) s.week += 1;
+          stats.set(purchase.recipient, s);
+        }
+        return stats;
+      }
+
+      function computeBids(nodes) {
+        const since = Date.now() - CFG.BID_DAYS * DAY;
+        const bids = new Map();
+        for (const node of nodes) {
+          if (timeOf(node) < since) continue;
+          const creator = node.owner.address;
+          bids.set(creator, (bids.get(creator) || 0n) + BigInt(node.quantity?.winston || "0"));
+        }
+        return bids;
+      }
+
+      async function load() {
+        state.loading = true;
+        render();
+        try {
+          const [listingNodes, purchases, fees, bids] = await Promise.all([
+            findAll({ tags: [appFilter, typeFilter("Listing")] }),
+            findAll({ tags: [appFilter, typeFilter("Purchase")] }),
+            findAll({ recipients: [CFG.ADMIN], tags: [appFilter, typeFilter("Fee")] }),
+            findAll({ recipients: [CFG.ADMIN], tags: [appFilter, typeFilter("Bid")] })
+          ]);
+          state.listings = parseListings(listingNodes);
+          state.stats = computeStats(purchases, fees);
+          state.bids = computeBids(bids);
+          state.randomOrder = shuffle(state.listings.map((l) => l.id));
+        } catch (err) {
+          toast(err.message);
+        }
+        state.loading = false;
+        render();
+      }
+
+      function shuffle(items) {
+        const out = [...items];
+        for (let i = out.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [out[i], out[j]] = [out[j], out[i]];
+        }
+        return out;
+      }
+
+      // ---------- extension bridge ----------
+
+      function postToExtension(message) {
+        window.postMessage({ source: "x-remark-web", ...message }, location.origin === "null" ? "*" : location.origin);
+      }
+
+      window.addEventListener("message", (event) => {
+        if (event.source !== window || event.data?.source !== "x-remark-ext") return;
+        if (event.data.type !== "STATE") return;
+        state.ext = {
+          ready: true,
+          address: event.data.address || "",
+          owned: new Map((event.data.owned || []).map((o) => [`${o.creator}|${o.versionId}`, o.status]))
+        };
+        renderExt();
+        render();
+      });
+
+      function renderExt() {
+        const pill = $("ext-pill");
+        pill.classList.toggle("on", state.ext.ready);
+        pill.querySelector("span").textContent = state.ext.ready
+          ? state.ext.address
+            ? `插件已连接 · ${shortAddr(state.ext.address)}`
+            : "插件已连接 · 未登录"
+          : "未检测到插件";
+      }
+
+      function requireExtension(action) {
+        if (!state.ext.ready) {
+          openInstall();
+          return;
+        }
+        action();
+      }
+
+      // ---------- rendering ----------
+
+      const statsOf = (creator) => state.stats.get(creator) || { total: 0, month: 0, week: 0 };
+
+      function matches(listing) {
+        const q = state.query.trim().toLowerCase().replace(/^@/, "");
+        if (!q) return true;
+        return [listing.title, listing.description, ...listing.groups, ...listing.preview, listing.creator]
+          .join(" ")
+          .toLowerCase()
+          .includes(q);
+      }
+
+      function ownedStatus(listing) {
+        return state.ext.owned.get(`${listing.creator}|${listing.versionId}`);
+      }
+
+      function sortedBoard() {
+        const list = state.listings.filter(matches);
+        const byCreated = (a, b) => b.createdAt - a.createdAt;
+        const byMetric = (key) => (a, b) => statsOf(b.creator)[key] - statsOf(a.creator)[key] || byCreated(a, b);
+        if (state.tab === "total") return list.sort(byMetric("total"));
+        if (state.tab === "month") return list.sort(byMetric("month"));
+        if (state.tab === "week") return list.sort(byMetric("week"));
+        if (state.tab === "latest") return list.sort(byCreated);
+        const order = new Map(state.randomOrder.map((id, i) => [id, i]));
+        return list.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+      }
+
+      function coverStyle(listing) {
+        const [h1, h2] = hues(listing.creator);
+        return `--h1:${h1};--h2:${h2}`;
+      }
+
+      function initial(title) {
+        return esc([...title.trim()][0] || "X");
+      }
+
+      function cardHtml(listing, rank, index) {
+        const s = statsOf(listing.creator);
+        const metric = { total: s.total, month: s.month, week: s.week }[state.tab] ?? s.total;
+        const metricLabel = { month: "本月售出", week: "本周售出" }[state.tab] || "累计售出";
+        const ranked = ["total", "month", "week"].includes(state.tab);
+        const owned = ownedStatus(listing);
+        return `
+          <article class="card" data-id="${listing.id}" style="${coverStyle(listing)};animation-delay:${Math.min(index, 12) * 40}ms">
+            <div class="cover">
+              ${ranked ? `<span class="rank ${rank <= 3 ? `r${rank}` : ""}">#${rank}</span>` : ""}
+              <span class="price-tag">${winstonToAr(listing.priceWinston)} AR</span>
+              <div class="avatar">${initial(listing.title)}</div>
+              ${owned ? `<span class="owned-badge">${owned === "done" ? "已拥有" : "已付款"}</span>` : ""}
+            </div>
+            <div class="card-body">
+              <h3>${esc(listing.title)}</h3>
+              ${listing.description ? `<p class="desc">${esc(listing.description)}</p>` : ""}
+              <div class="chips">${listing.groups.slice(0, 4).map((g) => `<span class="chip">${esc(g)}</span>`).join("")}</div>
+              <div class="card-foot">
+                <span class="metric fire"><b>${metric}</b> ${metricLabel}</span>
+                <span class="metric"><b>${listing.count}</b> 条</span>
+                <span>${timeAgo(listing.createdAt)}</span>
+              </div>
+            </div>
+          </article>`;
+      }
+
+      function renderStats() {
+        const totalSales = [...state.stats.values()].reduce((sum, s) => sum + s.total, 0);
+        const entries = state.listings.reduce((sum, l) => sum + l.count, 0);
+        const fresh = state.listings.filter((l) => Date.now() - l.createdAt <= 7 * DAY).length;
+        const items = [
+          [state.listings.length, "在售备注组"],
+          [totalSales, "累计成交"],
+          [entries, "收录备注"],
+          [fresh, "本周更新"]
+        ];
+        $("stats").innerHTML = items
+          .map(([value, label]) => `<div class="stat"><b>${state.loading ? "—" : value}</b><span>${label}</span></div>`)
+          .join("");
+      }
+
+      function renderPromo() {
+        const box = $("promo");
+        if (state.loading) {
+          box.innerHTML = `<div class="skeleton" style="height:150px"></div>`.repeat(3);
+          return;
+        }
+        const promoted = state.listings
+          .filter((l) => state.bids.get(l.creator) > 0n && matches(l))
+          .sort((a, b) => (state.bids.get(b.creator) > state.bids.get(a.creator) ? 1 : -1))
+          .slice(0, CFG.PROMO_SLOTS);
+        if (!promoted.length) {
+          box.innerHTML = `<div class="promo-empty" style="grid-column:1/-1">竞价位虚位以待 —— 出价即可让你的备注组出现在这里</div>`;
+          return;
+        }
+        box.innerHTML = promoted
+          .map(
+            (l, i) => `
+            <div class="promo-card" data-id="${l.id}" style="${coverStyle(l)}">
+              <span class="bid">No.${i + 1} · 竞价 ${winstonToAr(state.bids.get(l.creator))} AR</span>
+              <div class="inner">
+                <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+                  <div class="avatar" style="position:static;width:44px;height:44px;font-size:18px;border:none">${initial(l.title)}</div>
+                  <div>
+                    <h3>${esc(l.title)}</h3>
+                    <div style="color:var(--muted);font-size:12px;margin-top:2px">${l.count} 条 · 售出 ${statsOf(l.creator).total}</div>
+                  </div>
+                </div>
+                ${l.description ? `<p class="desc">${esc(l.description)}</p>` : ""}
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+                  <b style="font-size:18px">${winstonToAr(l.priceWinston)} AR</b>
+                  <span class="chip">查看详情</span>
+                </div>
+              </div>
+            </div>`
+          )
+          .join("");
+      }
+
+      function renderBoard() {
+        const box = $("board");
+        $("shuffle").hidden = state.tab !== "random";
+        if (state.loading) {
+          box.innerHTML = `<div class="skeleton"></div>`.repeat(6);
+          return;
+        }
+        const list = sortedBoard();
+        if (!list.length) {
+          box.innerHTML = `<div class="empty">${
+            state.query ? "没有找到匹配的备注组" : "还没有创作者上架，成为第一个吧！"
+          }</div>`;
+          return;
+        }
+        box.innerHTML = list.map((l, i) => cardHtml(l, i + 1, i)).join("");
+      }
+
+      function render() {
+        renderStats();
+        renderPromo();
+        renderBoard();
+      }
+
+      // ---------- modals ----------
+
+      function openModal(html) {
+        $("sheet").innerHTML = `<button class="close" type="button" data-close>✕</button>${html}`;
+        $("modal").hidden = false;
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        $("modal").hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      function buyButton(listing) {
+        if (!state.ext.ready) return `<button class="btn primary" data-install>安装插件后购买</button>`;
+        if (!state.ext.address) return `<button class="btn primary" data-open-ext="creator">先在插件中创建账号</button>`;
+        if (listing.creator === state.ext.address) return `<button class="btn" disabled>这是你的发布</button>`;
+        const owned = ownedStatus(listing);
+        if (owned === "done") return `<button class="btn" disabled>已拥有 · 可在插件中免费同步</button>`;
+        if (owned === "waiting") return `<button class="btn" disabled>已付款 · 自动发货中</button>`;
+        if (owned === "paying") return `<button class="btn primary" data-buy="${listing.id}">继续完成付款</button>`;
+        return `<button class="btn primary" data-buy="${listing.id}">立即购买</button>`;
+      }
+
+      function openDetail(id) {
+        const l = state.listings.find((x) => x.id === id);
+        if (!l) return;
+        const s = statsOf(l.creator);
+        const bid = state.bids.get(l.creator);
+        openModal(`
+          <div class="cover" style="${coverStyle(l)}">
+            ${bid ? `<span class="price-tag" style="left:12px;right:auto;color:var(--gold)">竞价推广中</span>` : ""}
+            <div class="avatar">${initial(l.title)}</div>
+          </div>
+          <div class="sheet-body">
+            <h2>${esc(l.title)}</h2>
+            <div class="by">创作者 ${shortAddr(l.creator)} · 更新于 ${timeAgo(l.createdAt)}</div>
+            ${l.description ? `<div class="full-desc">${esc(l.description)}</div>` : ""}
+            <div class="kpis">
+              <div><b>${s.total}</b><span>累计售出</span></div>
+              <div><b>${s.month}</b><span>近 30 天</span></div>
+              <div><b>${s.week}</b><span>近 7 天</span></div>
+              <div><b>${l.count}</b><span>备注条数</span></div>
+            </div>
+            ${l.groups.length ? `<h4>包含分组</h4><div class="chips">${l.groups.map((g) => `<span class="chip">${esc(g)}</span>`).join("")}</div>` : ""}
+            ${
+              l.preview.length
+                ? `<h4>部分收录用户</h4><div class="chips">${l.preview
+                    .map((u) => `<a class="chip user" href="https://x.com/${esc(u)}" target="_blank" rel="noopener">@${esc(u)}</a>`)
+                    .join("")}</div>`
+                : ""
+            }
+            <div class="buy-bar">
+              <div>
+                <span class="big">${winstonToAr(l.priceWinston)} AR</span>
+                <small>一次购买，本版本永久免费重新同步</small>
+              </div>
+              ${buyButton(l)}
+            </div>
+          </div>`);
+      }
+
+      function openInstall() {
+        openModal(`
+          <div class="sheet-body" style="padding-top:30px">
+            <h2>需要安装「X 人员标注」插件</h2>
+            <p class="by">购买、同步和竞价都通过插件完成，账号与密钥只保存在你自己的浏览器里。</p>
+            <h4>安装步骤</h4>
+            <ol class="steps">
+              <li>获取插件文件夹并解压</li>
+              <li>打开 <code>chrome://extensions</code>，开启右上角「开发者模式」</li>
+              <li>点击「加载已解压的扩展程序」，选择插件文件夹</li>
+              <li>在插件弹窗中创建账号，然后刷新本页</li>
+            </ol>
+            <div class="buy-bar">
+              <div><b>已安装？</b><small>刷新页面后右上角会显示「插件已连接」</small></div>
+              <button class="btn primary" type="button" onclick="location.reload()">刷新页面</button>
+            </div>
+          </div>`);
+      }
+
+      // ---------- events ----------
+
+      $("tabs").addEventListener("click", (e) => {
+        const button = e.target.closest("button[data-tab]");
+        if (!button) return;
+        state.tab = button.dataset.tab;
+        if (state.tab === "random") state.randomOrder = shuffle(state.listings.map((l) => l.id));
+        document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b === button));
+        renderBoard();
+      });
+
+      $("shuffle").addEventListener("click", () => {
+        state.randomOrder = shuffle(state.listings.map((l) => l.id));
+        renderBoard();
+      });
+
+      $("q").addEventListener("input", (e) => {
+        state.query = e.target.value;
+        renderPromo();
+        renderBoard();
+      });
+
+      document.addEventListener("click", (e) => {
+        const card = e.target.closest("[data-id]");
+        if (card && !e.target.closest(".sheet")) openDetail(card.dataset.id);
+      });
+
+      $("modal").addEventListener("click", (e) => {
+        if (e.target === $("modal") || e.target.closest("[data-close]")) closeModal();
+        if (e.target.closest("[data-install]")) openInstall();
+        const buy = e.target.closest("[data-buy]");
+        if (buy) {
+          postToExtension({ type: "BUY", listingId: buy.dataset.buy });
+          toast("已在插件中打开付款页面");
+          closeModal();
+        }
+        const openExt = e.target.closest("[data-open-ext]");
+        if (openExt) {
+          postToExtension({ type: "OPEN", page: openExt.dataset.openExt });
+          closeModal();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      $("ext-pill").addEventListener("click", () => {
+        if (!state.ext.ready) openInstall();
+        else postToExtension({ type: "OPEN", page: "purchases" });
+      });
+
+      $("become-creator").addEventListener("click", () =>
+        requireExtension(() => postToExtension({ type: "OPEN", page: "creator" }))
+      );
+
+      $("bid-btn").addEventListener("click", () =>
+        requireExtension(() => postToExtension({ type: "OPEN", page: "bid" }))
+      );
+
+      renderExt();
+      postToExtension({ type: "PING" });
+      setTimeout(() => {
+        if (!state.ext.ready) postToExtension({ type: "PING" });
+      }, 1200);
+      load();
+    </script>
+  </body>
+</html>

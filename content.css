@@ -1,0 +1,199 @@
+.x-remark-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 1px 0 2px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.x-remark-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 140px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.x-remark-pill.name {
+  color: #0f1419;
+  background: #ffe566;
+  border: 1px solid #f0c800;
+}
+
+.x-remark-pill.group {
+  color: #1d9bf0;
+  background: rgba(29, 155, 240, 0.12);
+  border: 1px solid rgba(29, 155, 240, 0.35);
+}
+
+.x-remark-meta:hover .x-remark-pill.name {
+  background: #ffd633;
+}
+
+.x-remark-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 4px;
+  flex-shrink: 0;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.x-remark-inline:hover .x-remark-pill.name {
+  background: #ffd633;
+}
+
+.x-remark-profile-btn {
+  margin-right: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid #536471;
+  background: transparent;
+  color: #e7e9ea;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.x-remark-profile-btn:hover {
+  background: rgba(239, 243, 244, 0.1);
+}
+
+#x-remark-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#x-remark-modal.open {
+  display: block;
+}
+
+.x-remark-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.x-remark-dialog {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  width: min(360px, calc(100vw - 32px));
+  background: #15202b;
+  color: #e7e9ea;
+  border: 1px solid #38444d;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.x-remark-dialog h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.x-remark-user {
+  margin: 0 0 14px;
+  color: #8b98a5;
+  font-size: 14px;
+}
+
+.x-remark-dialog input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #38444d;
+  background: #0f1419;
+  color: #e7e9ea;
+  padding: 0 12px;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.x-remark-dialog input[data-role="group"] {
+  margin-bottom: 0;
+}
+
+.x-remark-dialog input:focus {
+  border-color: #1d9bf0;
+}
+
+.x-remark-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+.x-remark-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.x-remark-btn {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.x-remark-btn.primary {
+  background: #1d9bf0;
+  color: #fff;
+}
+
+.x-remark-btn.ghost {
+  background: transparent;
+  color: #e7e9ea;
+  border: 1px solid #536471;
+}
+
+.x-remark-btn.danger {
+  background: transparent;
+  color: #f4212e;
+  border: 1px solid #f4212e;
+}
+
+#x-remark-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%) translateY(20px);
+  background: #1d9bf0;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 2147483647;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#x-remark-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
