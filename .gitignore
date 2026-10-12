@@ -1,2 +1,3 @@
 escrow-wallet.json
 *.local.json
+dist/

@@ -42,13 +42,7 @@
         "https://arweave.net/*",
         "https://*.arweave.net/*",
         "https://turbo-gateway.com/*",
-        "https://*.turbo-gateway.com/*",
-        "https://permagate.io/*",
-        "https://*.permagate.io/*",
-        "https://ar-io.dev/*",
-        "https://*.ar-io.dev/*",
-        "http://localhost/*",
-        "http://127.0.0.1/*"
+        "https://*.turbo-gateway.com/*"
       ],
       "js": ["market-bridge.js"],
       "run_at": "document_idle"
