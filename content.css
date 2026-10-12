@@ -53,6 +53,17 @@
   background: #ffd633;
 }
 
+.x-remark-inline.mention {
+  margin: 0 2px;
+  vertical-align: baseline;
+}
+
+.x-remark-inline.mention .x-remark-pill {
+  padding: 0 5px;
+  font-size: 11px;
+  max-width: 110px;
+}
+
 .x-remark-profile-btn {
   margin-right: 8px;
   height: 36px;

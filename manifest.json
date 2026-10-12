@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X 人员标注",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "为 X 用户添加本地备注与分组，免费云备份，创作者可出售自己的备注",
   "permissions": ["storage", "contextMenus", "alarms"],
   "host_permissions": [

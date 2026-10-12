@@ -1,51 +1,47 @@
 (() => {
-  const BLOCK_SELECTOR = '[data-testid="UserName"], [data-testid="User-Name"]';
+  const NAME_BLOCK_SELECTOR = '[data-testid="UserName"], [data-testid="User-Name"]';
+  const LINK_SKIP_SELECTOR =
+    '[data-testid="UserName"], nav, [role="navigation"], [data-testid="AppTabBar_Profile_Link"], #x-remark-modal';
+  const MENTION_SCOPE_SELECTOR = '[data-testid="tweetText"], [data-testid="UserDescription"], [data-testid="messageEntry"]';
+  const HANDLE_ONLY_SELECTOR = '[data-testid="conversation"], [data-testid="TypeaheadUser"]';
   const RESERVED = new Set([
     "home", "explore", "notifications", "messages", "i", "settings", "search", "compose",
     "login", "signup", "intent", "hashtag", "tos", "privacy", "about", "help", "jobs",
-    "download", "share", "status"
+    "download", "share", "status", "logout", "account", "premium", "verified-choose"
   ]);
+  const PROFILE_HREF = /^(?:https?:\/\/(?:www\.|mobile\.)?(?:x|twitter)\.com)?\/([A-Za-z0-9_]{1,15})\/?(?:[?#].*)?$/i;
+  const HANDLE_TEXT = /^@([A-Za-z0-9_]{1,15})$/;
 
   let remarks = {};
-  let scheduled = false;
+  let renderTimer = null;
 
-  function usernameFromHref(href) {
-    try {
-      const url = new URL(href, location.origin);
-      if (!/(^|\.)(x|twitter)\.com$/i.test(url.hostname)) return null;
-      const [first, second] = url.pathname.split("/").filter(Boolean);
-      if (!first || second || RESERVED.has(first.toLowerCase())) return null;
-      return /^[A-Za-z0-9_]{1,15}$/.test(first) ? first.toLowerCase() : null;
-    } catch {
-      return null;
-    }
+  function profileFromHref(href) {
+    const match = href && href.match(PROFILE_HREF);
+    if (!match || RESERVED.has(match[1].toLowerCase())) return null;
+    return match[1].toLowerCase();
   }
 
-  function findHandleElement(block) {
-    for (const el of block.querySelectorAll("span, a")) {
-      if (el.children.length === 0 && /^@[A-Za-z0-9_]{1,15}$/.test(el.textContent.trim())) return el;
+  function handleOf(el) {
+    const match = el.textContent.trim().match(HANDLE_TEXT);
+    return match ? match[1].toLowerCase() : null;
+  }
+
+  function findHandleElement(root) {
+    for (const el of root.querySelectorAll("span, a")) {
+      if (el.children.length === 0 && handleOf(el)) return el;
     }
     return null;
   }
 
   function findUsername(block) {
     for (const a of block.querySelectorAll("a[href]")) {
-      const username = usernameFromHref(a.getAttribute("href"));
+      const username = profileFromHref(a.getAttribute("href"));
       if (username) return username;
     }
     const handle = findHandleElement(block);
-    if (handle) return handle.textContent.trim().slice(1).toLowerCase();
+    if (handle) return handleOf(handle);
     const match = block.textContent.match(/@([A-Za-z0-9_]{1,15})/);
     return match ? match[1].toLowerCase() : null;
-  }
-
-  function findNameAnchor(block, username) {
-    for (const a of block.querySelectorAll("a[href]")) {
-      if (usernameFromHref(a.getAttribute("href")) !== username) continue;
-      const text = a.textContent.trim();
-      if (text && !text.startsWith("@")) return a;
-    }
-    return null;
   }
 
   function handleRowOf(block) {
@@ -57,27 +53,29 @@
     return node.parentElement ? node : null;
   }
 
-  function buildMeta(className, username, entry, sig) {
-    const meta = document.createElement(className === "x-remark-meta" ? "div" : "span");
-    meta.className = className;
-    meta.dataset.user = username;
-    meta.dataset.sig = sig;
-    meta.title = entry.source ? `来自「${entry.source.title}」，点击编辑` : "点击编辑备注";
-    meta.innerHTML = `
+  function buildPill(tag, className, username, entry, sig) {
+    const el = document.createElement(tag);
+    el.className = className;
+    el.dataset.user = username;
+    el.dataset.sig = sig;
+    el.title = entry.source ? `来自「${entry.source.title}」，点击编辑` : "点击编辑备注";
+    el.innerHTML = `
       <span class="x-remark-pill name">${UI.escapeHtml(entry.remark)}</span>
       ${entry.group ? `<span class="x-remark-pill group">${UI.escapeHtml(entry.group)}</span>` : ""}
     `;
-    meta.addEventListener("click", (e) => {
+    el.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
       openEditor(username);
     });
-    return meta;
+    return el;
   }
 
-  function renderBlock(block) {
+  // ---------- profile header: remark row between name and @handle ----------
+
+  function renderHeader(block) {
     const username = findUsername(block);
-    const existing = block.querySelector(".x-remark-meta, .x-remark-inline");
+    const existing = block.querySelector(".x-remark-meta");
     const entry = username ? remarks[username] : null;
     if (!entry) {
       existing?.remove();
@@ -86,25 +84,76 @@
     const sig = `${username}|${entry.remark}|${entry.group}`;
     if (existing?.dataset.sig === sig) return;
     existing?.remove();
+    const meta = buildPill("div", "x-remark-meta", username, entry, sig);
+    const row = handleRowOf(block);
+    if (row) row.insertAdjacentElement("beforebegin", meta);
+    else block.appendChild(meta);
+  }
 
-    if (block.dataset.testid === "UserName") {
-      const meta = buildMeta("x-remark-meta", username, entry, sig);
-      const row = handleRowOf(block);
-      if (row) row.insertAdjacentElement("beforebegin", meta);
-      else block.appendChild(meta);
+  // ---------- everywhere else: pill right after the name / @mention ----------
+
+  function upsertInline(target, username, variant) {
+    const entry = remarks[username];
+    const next = target.nextElementSibling;
+    const pill = next?.classList.contains("x-remark-inline") ? next : null;
+    if (!entry) {
+      pill?.remove();
       return;
     }
-
-    const meta = buildMeta("x-remark-inline", username, entry, sig);
-    const anchor = findNameAnchor(block, username);
-    if (anchor) anchor.insertAdjacentElement("afterend", meta);
-    else block.prepend(meta);
+    const shown = variant === "mention" ? { ...entry, group: "" } : entry;
+    const sig = `${variant}|${username}|${entry.remark}|${shown.group}`;
+    if (pill?.dataset.sig === sig) return;
+    pill?.remove();
+    const className = variant === "mention" ? "x-remark-inline mention" : "x-remark-inline";
+    target.insertAdjacentElement("afterend", buildPill("span", className, username, shown, sig));
   }
+
+  function targetUserOf(el) {
+    if (!el) return null;
+    return el.tagName === "A" ? profileFromHref(el.getAttribute("href")) : handleOf(el);
+  }
+
+  function removeStalePills() {
+    for (const pill of document.querySelectorAll(".x-remark-inline")) {
+      if (targetUserOf(pill.previousElementSibling) !== pill.dataset.user || !remarks[pill.dataset.user]) {
+        pill.remove();
+      }
+    }
+  }
+
+  function renderLinks() {
+    for (const a of document.querySelectorAll("a[href]")) {
+      const username = profileFromHref(a.getAttribute("href"));
+      if (!username || a.closest(LINK_SKIP_SELECTOR)) continue;
+      const text = a.textContent.trim();
+      if (!text) continue;
+      const mention = text.match(HANDLE_TEXT);
+      if (mention) {
+        if (mention[1].toLowerCase() === username && a.closest(MENTION_SCOPE_SELECTOR)) {
+          upsertInline(a, username, "mention");
+        }
+        continue;
+      }
+      upsertInline(a, username, "name");
+    }
+  }
+
+  function renderHandleOnly() {
+    for (const box of document.querySelectorAll(HANDLE_ONLY_SELECTOR)) {
+      const handle = findHandleElement(box);
+      if (!handle) continue;
+      const attachedElsewhere = [...box.querySelectorAll(".x-remark-inline")].some(
+        (pill) => pill.previousElementSibling !== handle
+      );
+      if (!attachedElsewhere) upsertInline(handle, handleOf(handle), "name");
+    }
+  }
+
+  // ---------- profile page button ----------
 
   function profileUsername() {
     const parts = location.pathname.split("/").filter(Boolean);
-    if (parts.length !== 1) return null;
-    return usernameFromHref(`/${parts[0]}`);
+    return parts.length === 1 ? profileFromHref(`/${parts[0]}`) : null;
   }
 
   function renderProfileButton() {
@@ -133,17 +182,21 @@
   }
 
   function renderAll() {
-    document.querySelectorAll(BLOCK_SELECTOR).forEach(renderBlock);
+    removeStalePills();
+    document.querySelectorAll('[data-testid="UserName"]').forEach(renderHeader);
+    if (Object.keys(remarks).length) {
+      renderLinks();
+      renderHandleOnly();
+    }
     renderProfileButton();
   }
 
   function scheduleRender() {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
+    if (renderTimer) return;
+    renderTimer = setTimeout(() => {
+      renderTimer = null;
       renderAll();
-    });
+    }, 120);
   }
 
   function ensureModal() {
@@ -242,7 +295,7 @@
   document.addEventListener(
     "dblclick",
     (e) => {
-      const block = e.target instanceof Element ? e.target.closest(BLOCK_SELECTOR) : null;
+      const block = e.target instanceof Element ? e.target.closest(NAME_BLOCK_SELECTOR) : null;
       const username = block && findUsername(block);
       if (!username) return;
       e.preventDefault();
