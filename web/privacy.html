@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X 人员标注 隐私权政策 / Privacy Policy</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #0b0f17; color: #d8dee9; font: 15px/1.75 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 40px 22px 80px; }
+  h1 { font-size: 26px; margin: 0 0 4px; color: #fff; }
+  h2 { font-size: 18px; margin: 32px 0 8px; color: #8ab4ff; }
+  .meta { color: #8b95a7; font-size: 13px; }
+  .lang { margin-top: 48px; padding-top: 24px; border-top: 1px solid #1f2a3a; }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+  code { background: #162030; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  a { color: #8ab4ff; }
+  nav a { margin-right: 14px; }
+</style>
+</head>
+<body>
+<main>
+<nav><a href="#zh">中文</a><a href="#en">English</a></nav>
+
+<section id="zh">
+<h1>X 人员标注 隐私权政策</h1>
+<p class="meta">生效日期：2026 年 10 月 12 日</p>
+
+<p>「X 人员标注」（以下简称“本扩展”）是一款 Chrome 扩展程序，用于为 X（原 Twitter）上的用户添加个人备注名和分组，并在 X 网页中显示。本政策说明本扩展处理哪些数据、如何处理以及您拥有的选择。</p>
+
+<h2>1. 我们不收集什么</h2>
+<ul>
+  <li>本扩展没有自己的服务器账号体系，不要求您登录，也不收集您的 X 账号、密码、Cookie、私信内容或浏览记录。</li>
+  <li>本扩展不包含任何统计、分析或广告代码，不追踪您的行为。</li>
+  <li>我们不会出售、出租或与第三方共享您的数据，也不会将数据用于与本扩展功能无关的用途或用于信用评估。</li>
+</ul>
+
+<h2>2. 保存在您本机的数据</h2>
+<ul>
+  <li><b>备注与分组</b>：您为 X 用户设置的备注名、分组及修改时间，仅保存在浏览器本地存储（<code>chrome.storage.local</code>）中。</li>
+  <li><b>内置钱包</b>：本扩展会在本地生成一个 Arweave 钱包，用于加密备份和付款。钱包私钥只保存在您的浏览器本地，绝不会上传。</li>
+  <li><b>创作者与购买记录</b>：您发布的备注组信息和已购买的备注组记录。</li>
+  <li>本扩展会读取 X 页面中显示的用户名，仅用于在页面上找到对应位置插入您的备注；这些页面内容不会被保存或发送到任何地方。</li>
+  <li>不联网时本扩展的备注功能完全可用，不会产生任何网络请求。</li>
+</ul>
+
+<h2>3. 仅在您主动操作时发送的数据</h2>
+<p>以下数据只在您主动点击相应按钮时才会发送，且发送到公共的 Arweave 永久存储网络（通过 <code>upload.ardrive.io</code> 上传，通过 <code>arweave.net</code>、<code>turbo-gateway.com</code> 读取）：</p>
+<ul>
+  <li><b>云备份</b>：您的备注会先在本机使用 AES-GCM 加密，再上传。只有持有您钱包私钥的您本人才能解密，包括我们在内的任何其他人都无法读取内容。</li>
+  <li><b>发布备注组到市场</b>：您填写的标题、简介、价格、分组名称、条目数量以及最多 8 个用户名（作为预览）会以明文公开显示；备注正文加密存储。为了在您不在线时也能自动把内容交付给买家，本扩展的自动交付服务持有可解密您<b>已发布</b>备注组的密钥，仅用于向付款买家授权，不会用于其他用途。您的个人云备份不受此影响。</li>
+  <li><b>购买与竞价</b>：付款通过 Arweave 区块链完成，交易的钱包地址、金额和时间会在链上公开可查。</li>
+</ul>
+
+<h2>4. 关于 Arweave 公共网络</h2>
+<ul>
+  <li>Arweave 是公开、永久的存储网络，任何人都可以下载上面的数据（加密数据只能看到密文）。</li>
+  <li>数据一经上传便<b>无法删除或修改</b>。您可以在扩展中下架备注组，下架后市场不再展示，但已上传的历史数据仍会存在于网络上。</li>
+  <li>请勿在公开的标题、简介等字段中填写您不希望公开的信息。</li>
+</ul>
+
+<h2>5. 权限说明</h2>
+<ul>
+  <li><code>storage</code>：在本地保存备注、分组和钱包。</li>
+  <li><code>contextMenus</code>：在 X 页面右键菜单中提供“为该用户添加备注”。</li>
+  <li><code>alarms</code>：定期检查已购买的备注组是否可同步到本地。</li>
+  <li>x.com / twitter.com：在页面中显示和编辑备注。</li>
+  <li>arweave.net、turbo-gateway.com、upload.ardrive.io：上传和读取加密备份与备注组，以及连接托管在这些域名下的备注市场网页。</li>
+</ul>
+
+<h2>6. 数据删除</h2>
+<p>卸载本扩展或在浏览器中清除扩展数据，即可删除全部本地数据（包括钱包私钥，如需保留请先在扩展弹窗中点击「导出账号」）。已上传到 Arweave 的数据因网络特性无法删除，但个人备份为加密内容，没有您的私钥无人可读。</p>
+
+<h2>7. 儿童隐私</h2>
+<p>本扩展不面向 13 岁以下儿童，也不会有意收集儿童的个人信息。</p>
+
+<h2>8. 政策变更与联系方式</h2>
+<p>本政策如有更新，将发布新版本页面并在扩展商店说明中更新链接。如有疑问，请通过 <a href="https://github.com/maya970/x-remark-market/issues" target="_blank" rel="noopener">GitHub Issues</a> 联系我们。</p>
+</section>
+
+<section id="en" class="lang">
+<h1>X Remark – Privacy Policy</h1>
+<p class="meta">Effective date: October 12, 2026</p>
+
+<p>"X 人员标注 / X Remark" (the "Extension") is a Chrome extension that lets you add personal nicknames (remarks) and groups to users on X (formerly Twitter) and shows them on X pages. This policy explains what data the Extension handles, how, and what choices you have.</p>
+
+<h2>1. What we do not collect</h2>
+<ul>
+  <li>The Extension has no account system and does not ask you to log in. It does not collect your X account, password, cookies, direct messages, or browsing history.</li>
+  <li>It contains no analytics, tracking, or advertising code.</li>
+  <li>We do not sell, rent, or share your data with third parties, do not use it for purposes unrelated to the Extension's single purpose, and do not use it to determine creditworthiness.</li>
+</ul>
+
+<h2>2. Data stored locally on your device</h2>
+<ul>
+  <li><b>Remarks and groups</b> you assign to X users, stored only in the browser's local storage (<code>chrome.storage.local</code>).</li>
+  <li><b>Built-in wallet</b>: the Extension generates an Arweave wallet locally for encrypted backup and payments. The private key never leaves your browser.</li>
+  <li><b>Creator and purchase records</b> for remark collections you publish or buy.</li>
+  <li>The Extension reads usernames displayed on X pages only to place your remarks next to them. Page content is never stored or transmitted.</li>
+  <li>All remark features work offline without any network requests.</li>
+</ul>
+
+<h2>3. Data sent only when you take action</h2>
+<p>The following is sent only when you explicitly click the corresponding button, to the public Arweave permanent storage network (uploaded via <code>upload.ardrive.io</code>, read via <code>arweave.net</code> and <code>turbo-gateway.com</code>):</p>
+<ul>
+  <li><b>Cloud backup</b>: your remarks are encrypted on your device with AES-GCM before upload. Only you, holding your wallet's private key, can decrypt them. Nobody else, including us, can read them.</li>
+  <li><b>Publishing a collection to the market</b>: the title, description, price, group names, entry count, and up to 8 usernames (as a preview) are public in plain text; the remark content is encrypted. So buyers can receive purchases automatically while you are offline, the Extension's automated delivery service holds a key that can decrypt collections you have <b>published</b>, used solely to grant access to paying buyers. Your personal backups are not affected.</li>
+  <li><b>Purchases and bids</b> are paid on the Arweave blockchain; wallet addresses, amounts, and timestamps are publicly visible on-chain.</li>
+</ul>
+
+<h2>4. About the Arweave public network</h2>
+<ul>
+  <li>Arweave is a public, permanent storage network. Anyone can download data stored on it (encrypted data appears only as ciphertext).</li>
+  <li>Once uploaded, data <b>cannot be deleted or modified</b>. You can delist a collection so the market no longer shows it, but previously uploaded data remains on the network.</li>
+  <li>Do not put information you do not want to be public in public fields such as title and description.</li>
+</ul>
+
+<h2>5. Permissions</h2>
+<ul>
+  <li><code>storage</code>: save remarks, groups, and the wallet locally.</li>
+  <li><code>contextMenus</code>: provide "Add remark for this user" in the right-click menu on X.</li>
+  <li><code>alarms</code>: periodically check whether purchased collections are ready to sync locally.</li>
+  <li>x.com / twitter.com: display and edit remarks on the page.</li>
+  <li>arweave.net, turbo-gateway.com, upload.ardrive.io: upload and fetch encrypted backups and collections, and connect to the remark market web page hosted on these domains.</li>
+</ul>
+
+<h2>6. Data deletion</h2>
+<p>Uninstalling the Extension or clearing its data removes all local data, including the wallet private key (use "导出账号 / Export account" in the popup first if you want to keep it). Data already uploaded to Arweave cannot be deleted due to the nature of the network, but personal backups are encrypted and unreadable without your private key.</p>
+
+<h2>7. Children's privacy</h2>
+<p>The Extension is not directed to children under 13 and does not knowingly collect their personal information.</p>
+
+<h2>8. Changes and contact</h2>
+<p>If this policy changes, a new version will be published and the link in the store listing updated. For questions, contact us via <a href="https://github.com/maya970/x-remark-market/issues" target="_blank" rel="noopener">GitHub Issues</a>.</p>
+</section>
+</main>
+</body>
+</html>
